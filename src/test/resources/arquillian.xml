@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<arquillian xmlns="http://jboss.org/schema/arquillian"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+	<defaultProtocol type="Servlet 3.0" />
+
+	<group qualifier="jboss_managed">
+
+		<container qualifier="container_one" default="false">
+			<!-- SET JBOSS_HOME system property to location where your jboss is -->
+			<configuration>
+				<property name="jbossHome">${jboss.home}</property>
+				<property name="serverConfig">standalone-full-ha-cmserv.xml</property>
+				<property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m 
+				-Djava.net.preferIPv4Stack=true
+				-Djboss.node.name=ARQ_CLUSTER_ONE
+				-Dcom.ericsson.oss.sdk.node.identifier=ARQ_CLUSTER_ONE
+				-Djboss.messaging.group.address=${unique.jboss.messaging.group.address}
+				-Djboss.messaging.group.port=7914
+				-Dsfwk.upgrade.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dsfwk.healthcheck.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dsfwk.config.property.change.notifications.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dsfwk.config.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dsfwk.eservice.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dsfwk.service.availability.udp.mcast_addr=${unique.arquillian.ip.addr} 
+				-Dsdk.jgroups.distributed.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dorg.jboss.as.logging.per-deployment=false
+				-Dcom.ericsson.oss.sdk.tracing.autoannotate=off
+				-Dcom.ericsson.oss.itpf.sdk.cache.statistic=off
+				-Dcom.ericsson.oss.sdk.config.properties.polling.period=15000
+				-Djboss.tx.node.id=ARQ_CLUSTER_ONE 
+            	-Dcom.arjuna.orbportability.initialReferencesRoot=${jboss.home}
+            	-Ddps.ear.build.dir=${dps.ear.build.dir}
+            	-Dcom.ericsson.oss.itpf.sdk.cache.persistence.location.absolute.path=${cache.home}
+            	-DXML_REPO_PATH=${xml.repo}
+            	-Dservice.framework.configuration.properties=${service.framework.configuration.properties}
+            	-Drouterclientcluster.udp.mcast_addr=${unique.routerclientcluster.udp.mcast_addr}
+				-Dmedcluster.udp.mcast_addr=${unique.medcluster.udp.mcast_addr}
+				-Dmsload.udp.mcast_addr=${unique.msload.udp.mcast_addr}
+            	</property>
+				<property name="managementPort">9999</property>
+			</configuration>
+		</container>
+		<container qualifier="container_two" default="false">
+			<!-- SET JBOSS_HOME system property to location where your jboss is -->
+			<configuration>
+				<property name="jbossHome">${jboss.home}</property>
+				<property name="serverConfig">standalone-full-ha-mscm.xml</property>
+				<property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m
+				-Djava.net.preferIPv4Stack=true
+				-Djboss.server.base.dir=${jboss.home}/standalone2
+				-Djboss.socket.binding.port-offset=500
+				-Djboss.node.name=ARQ_CLUSTER_TWO
+				-Dcom.ericsson.oss.sdk.node.identifier=ARQ_CLUSTER_TWO
+				-Djboss.messaging.group.address=${unique.jboss.messaging.group.address}
+				-Djboss.messaging.group.port=7914
+				-Dsfwk.upgrade.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dsfwk.healthcheck.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dsfwk.config.property.change.notifications.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dsfwk.config.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dsfwk.eservice.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dsfwk.service.availability.udp.mcast_addr=${unique.arquillian.ip.addr} 
+				-Dsdk.jgroups.distributed.udp.mcast_addr=${unique.arquillian.ip.addr}
+				-Dorg.jboss.as.logging.per-deployment=false
+				-Dcom.ericsson.oss.sdk.tracing.autoannotate=off
+				-Dcom.ericsson.oss.itpf.sdk.cache.statistic=off
+				-Dcom.ericsson.oss.sdk.config.properties.polling.period=15000
+				-Djboss.tx.node.id=ARQ_CLUSTER_TWO
+            	-Dcom.arjuna.orbportability.initialReferencesRoot=${jboss.home} 
+            	-Ddps.ear.build.dir=${dps.ear.build.dir}
+            	-Dcom.ericsson.oss.itpf.sdk.cache.persistence.location.absolute.path=${cache.home}
+            	-DXML_REPO_PATH=${xml.repo}
+            	-Dservice.framework.configuration.properties=${service.framework.configuration.properties}
+            	-Drouterclientcluster.udp.mcast_addr=${unique.routerclientcluster.udp.mcast_addr}
+				-Dmedcluster.udp.mcast_addr=${unique.medcluster.udp.mcast_addr}
+				-Dmsload.udp.mcast_addr=${unique.msload.udp.mcast_addr}
+            	</property>
+				<property name="managementPort">10499</property>
+			</configuration>
+		</container>
+	</group>
+	
+</arquillian>
+  
