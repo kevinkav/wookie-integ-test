@@ -5,33 +5,38 @@
 
 	<defaultProtocol type="Servlet 3.0" />
 
+	<engine>
+		<property name="deploymentExportPath">${export.path}</property>
+	</engine>
+	
 	<group qualifier="jboss_managed">
-
 		<container qualifier="Container_A" default="false">
 			<!-- SET JBOSS_HOME system property to location where your jboss is -->
 			<configuration>
 				<property name="jbossHome">${jboss.home}</property>
-				<property name="serverConfig">standalone-full_wookie_jts_ejb3_node1.xml</property>
+				<property name="serverConfig">standalone-full_wookie_jts_ejb2_node1.xml</property>
 				<property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m 
 				-Djava.net.preferIPv4Stack=true
 				-Djboss.node.name=node1
 				-Djboss.tx.node.id=1111 
+				-Djboss.server.log.dir=${jboss.home}/standalone/log
             	-Dcom.arjuna.orbportability.initialReferencesRoot=${jboss.home}
             	</property>
 				<property name="managementPort">9999</property>
 			</configuration>
 		</container>
 		<container qualifier="Container_B" default="false">
-			<!-- SET JBOSS_HOME system property to location where your jboss is -->
+			SET JBOSS_HOME system property to location where your jboss is
 			<configuration>
 				<property name="jbossHome">${jboss.home}</property>
-				<property name="serverConfig">standalone-full_wookie_jts_ejb3_node2.xml</property>
+				<property name="serverConfig">standalone-full_wookie_jts_ejb2_node2.xml</property>
 				<property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m
 				-Djava.net.preferIPv4Stack=true
 				-Djboss.server.base.dir=${jboss.home}/standalone2
-				-Djboss.socket.binding.port-offset=500
-				-Djboss.node.name=node2
-				-Djboss.tx.node.id=2222				
+				-Djboss.socket.binding.port-offset=500 
+				-Djboss.node.name=node2 
+				-Djboss.tx.node.id=2222 
+				-Djboss.server.log.dir=${jboss.home}/standalone2/log				
             	</property>
 				<property name="managementPort">10499</property>
 			</configuration>

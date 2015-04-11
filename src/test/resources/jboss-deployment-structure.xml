@@ -1,0 +1,8 @@
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
+	<deployment>
+		<dependencies>
+			<module name="org.slf4j"></module>
+			<module name="org.jboss.shrinkwrap.core"></module>
+		</dependencies>
+	</deployment>
+</jboss-deployment-structure>
