@@ -14,6 +14,8 @@ package my.arquillian.test;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -25,10 +27,13 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class GreeterTest {
 
+	static final String CONTAINER_A = "Container_A";
+	
 	@Inject
 	Greeter greeter;
 
-	@Deployment
+	@Deployment(name = "Greeter")
+	@TargetsContainer(CONTAINER_A)
 	public static JavaArchive createDeployment() {
 		JavaArchive jar = ShrinkWrap.create(JavaArchive.class)
 				.addClass(Greeter.class)
@@ -38,6 +43,7 @@ public class GreeterTest {
 	}
 
 	@Test
+	@OperateOnDeployment("Greeter")
 	public void should_create_greeting() {
 		Assert.assertEquals("Hello, Earthling!",
 				greeter.createGreeting("Earthling"));

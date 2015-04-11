@@ -41,6 +41,113 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack_jboss</id>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<ignoreDirect>false</ignoreDirect>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.ericsson.oss.itpf.eap</groupId>
+									<artifactId>jboss-temp-tar</artifactId>
+									<version>2.1.9</version>
+									<type>tar.gz</type>
+									<overWrite>false</overWrite>
+									<outputDirectory>${jboss.home}</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-standalone2</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<includeEmptyDirs>true</includeEmptyDirs>
+							<overwrite>true</overwrite>
+							<outputDirectory>${jboss.home}/standalone2/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${jboss.home}/standalone</directory>
+									<includes>
+										<include>**/*.*</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-standalone-xml-node1</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<includeEmptyDirs>true</includeEmptyDirs>
+							<overwrite>true</overwrite>
+							<outputDirectory>${jboss.home}/standalone/configuration</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/test/resources</directory>
+									<includes>
+										<include>standalone-full_wookie_jts_ejb3_node1.xml</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-standalone-xml-node2</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<includeEmptyDirs>true</includeEmptyDirs>
+							<overwrite>true</overwrite>
+							<outputDirectory>${jboss.home}/standalone2/configuration</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/test/resources</directory>
+									<includes>
+										<include>standalone-full_wookie_jts_ejb3_node2.xml</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.17</version>
 				<configuration>
@@ -50,36 +157,11 @@
 					</systemProperties>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>unpack_jboss</id>
-						<phase>test</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<ignoreDirect>false</ignoreDirect>
-							<artifactItems>
-									<artifactItem>
-										<groupId>com.ericsson.oss.itpf.eap</groupId>
-										<artifactId>jboss-temp-tar</artifactId>
-										<version>2.1.9</version>
-										<type>tar.gz</type>
-										<overWrite>false</overWrite>
-										<outputDirectory>${jboss.home}</outputDirectory>
-									</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+
 		</plugins>
 	</build>
-	
-	
+
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
