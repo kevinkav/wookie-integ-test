@@ -29,7 +29,7 @@ public class MavenResolver {
 	 */
     public static <T extends Archive<T>> T resolveArchive(final Class<T> archiveFormat, final String coordinates) {
     	LOG.info("##### Resolving coordinates [{}]", coordinates);
-        return Maven.resolver().loadPomFromFile("pom.xml").resolve(coordinates).withoutTransitivity().asSingle(archiveFormat);
+        return Maven.resolver().offline().loadPomFromFile("pom.xml").resolve(coordinates).withoutTransitivity().asSingle(archiveFormat);
     }
         
 }

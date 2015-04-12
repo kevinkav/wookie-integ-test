@@ -10,11 +10,11 @@
 	</engine>
 	
 	<group qualifier="jboss_managed">
-		<container qualifier="Container_A" default="false">
+		<container qualifier="Container_1" default="false">
 			<!-- SET JBOSS_HOME system property to location where your jboss is -->
 			<configuration>
 				<property name="jbossHome">${jboss.home}</property>
-				<property name="serverConfig">standalone-full_wookie_jts_ejb2_node1.xml</property>
+				<property name="serverConfig">standalone-full-non-jts-node1.xml</property>
 				<property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m 
 				-Djava.net.preferIPv4Stack=true
 				-Djboss.node.name=node1
@@ -25,11 +25,11 @@
 				<property name="managementPort">9999</property>
 			</configuration>
 		</container>
-		<container qualifier="Container_B" default="false">
+		<container qualifier="Container_2" default="false">
 			SET JBOSS_HOME system property to location where your jboss is
 			<configuration>
 				<property name="jbossHome">${jboss.home}</property>
-				<property name="serverConfig">standalone-full_wookie_jts_ejb2_node2.xml</property>
+				<property name="serverConfig">standalone-full-non-jts-node2.xml</property>
 				<property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m
 				-Djava.net.preferIPv4Stack=true
 				-Djboss.server.base.dir=${jboss.home}/standalone2
@@ -39,6 +39,39 @@
 				-Djboss.server.log.dir=${jboss.home}/standalone2/log				
             	</property>
 				<property name="managementPort">10499</property>
+			</configuration>
+		</container>
+		<container qualifier="Container_3" default="false">
+			<!-- SET JBOSS_HOME system property to location where your jboss is -->
+			<configuration>
+				<property name="jbossHome">${jboss.home}</property>
+				<property name="serverConfig">standalone-full-jts-node1.xml</property>
+				<property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m 
+				-Djava.net.preferIPv4Stack=true 
+				-Djboss.server.base.dir=${jboss.home}/standalone3 
+				-Djboss.socket.binding.port-offset=1000 
+				-Djboss.node.name=node3 
+				-Djboss.tx.node.id=3333 
+				-Djboss.server.log.dir=${jboss.home}/standalone3/log
+            	-Dcom.arjuna.orbportability.initialReferencesRoot=${jboss.home}
+            	</property>
+				<property name="managementPort">10999</property>
+			</configuration>
+		</container>
+		<container qualifier="Container_4" default="false">
+			SET JBOSS_HOME system property to location where your jboss is
+			<configuration>
+				<property name="jbossHome">${jboss.home}</property>
+				<property name="serverConfig">standalone-full-jts-node2.xml</property>
+				<property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m
+				-Djava.net.preferIPv4Stack=true
+				-Djboss.server.base.dir=${jboss.home}/standalone4
+				-Djboss.socket.binding.port-offset=1500 
+				-Djboss.node.name=node4 
+				-Djboss.tx.node.id=4444 
+				-Djboss.server.log.dir=${jboss.home}/standalone4/log				
+            	</property>
+				<property name="managementPort">11499</property>
 			</configuration>
 		</container>
 	</group>
