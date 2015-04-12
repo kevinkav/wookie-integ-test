@@ -11,16 +11,24 @@
  *----------------------------------------------------------------------------*/
 package my.arquillian.test;
 
-import javax.ejb.EJB;
+import javax.inject.Inject;
+import javax.naming.NamingException;
+
+import my.remote.bean.locator.Ejb3xBeanLocator;
+import my.test.api.TestCaseLocal;
+import my.test.api.TestCaseRemote;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
+import org.jboss.arquillian.container.test.api.Testable;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -35,61 +43,126 @@ public class PersistenceContextScopeTest {
 	private static final String CONTAINER_4_JTS = "Container_4_jts";
 	private static final String EAR_A = "EAR_A";
 	private static final String EAR_B = "EAR_B";
-	private static final String JTS_TEST = "TEST_EAR";
+	private static final String TEST = "TEST";
 	private static final String EAR_A_GAV = "my.wookie.project:ear-module-a:ear:?";
 	private static final String EAR_B_GAV = "my.wookie.project:ear-module-b:ear:?";
+	private static final String TEST_API_GAV = "my.wookie.project:test-api:jar:?";
+	private static final String REMOTE_API_GAV = "my.wookie.project:remote-api:jar:?";
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceContextScopeTest.class);    
-
-/*    @EJB
-    TestCase*/
+  
+    @Inject
+    Ejb3xBeanLocator ejb3xBeanLocator;
+       
     
-	@Deployment(name = JTS_TEST, testable = true, order = 1)
-	@TargetsContainer(CONTAINER_3_JTS)
-    public static JavaArchive createDeployment() {
-		LOG.info("### Creating test deployment archive");
-        return ShrinkWrap.create(JavaArchive.class)
-            .addClass(PersistenceContextScopeTest.class)
-            .addClass(MavenResolver.class)
-            .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+    
+    /* **************************************************************
+     *                Deployments Containers 3 & 4
+     **************************************************************** */
+    
+	@Deployment(name = TEST + CONTAINER_1_NON_JTS, testable = true, order = 1)
+	@TargetsContainer(CONTAINER_1_NON_JTS)
+    public static EnterpriseArchive createTestEar_Container1() {
+		return Deployments.createTestEar();
     }
 	
-	
-	@Deployment(name = EAR_A, testable = false, order = 2)
-	@TargetsContainer(CONTAINER_3_JTS)
-	public static EnterpriseArchive createEarA() {
-		LOG.info("### Creating EAR A deployment archive");
-		return MavenResolver.resolveArchive(EnterpriseArchive.class, EAR_A_GAV);
+	@Deployment(name = EAR_A + CONTAINER_1_NON_JTS, testable = false, order = 2)
+	@TargetsContainer(CONTAINER_1_NON_JTS)
+	public static EnterpriseArchive getEarA_Container1() {
+		LOG.info("### Getting [ear-module-a] deployment archive ###");
+		return Deployments.getEarModuleA();
 	}
 	
-	@Deployment(name = EAR_B, testable = false, order = 3)
+	@Deployment(name = EAR_B + CONTAINER_2_NON_JTS, testable = false, order = 3)
+	@TargetsContainer(CONTAINER_2_NON_JTS)
+	public static EnterpriseArchive getEarB_Container2() {
+		LOG.info("### Getting [ear-module-b] deployment archive ##");
+		return Deployments.getEarModuleB();
+	}
+    
+    /* **************************************************************
+     *                Deployments Containers 3 & 4
+     **************************************************************** */
+    
+	@Deployment(name = TEST + CONTAINER_3_JTS, testable = true, order = 4)
+	@TargetsContainer(CONTAINER_3_JTS)
+    public static EnterpriseArchive createTestEar() {
+		return Deployments.createTestEar();
+    }
+	
+	@Deployment(name = EAR_A + CONTAINER_3_JTS, testable = false, order = 5)
+	@TargetsContainer(CONTAINER_3_JTS)
+	public static EnterpriseArchive getEarA() {
+		LOG.info("### Getting [ear-module-a] deployment archive ###");
+		return Deployments.getEarModuleA();
+	}
+	
+	@Deployment(name = EAR_B + CONTAINER_4_JTS, testable = false, order = 6)
 	@TargetsContainer(CONTAINER_4_JTS)
-	public static EnterpriseArchive createEarB() {
-		LOG.info("### Creating EAR B deployment archive");
-		return MavenResolver.resolveArchive(EnterpriseArchive.class, EAR_B_GAV);
+	public static EnterpriseArchive getEarB() {
+		LOG.info("### Getting [ear-module-b] deployment archive ##");
+		return Deployments.getEarModuleB();
+	}
+	
+	/* ***********************************************
+	 *                Test Cases
+	 ************************************************* */
+	
+	@Test
+	@OperateOnDeployment(TEST + CONTAINER_1_NON_JTS)
+	public void test_Ejb3x_StatelessA_Without_Jts() throws Exception {
+		LOG.info("### Beginning test [1] ###");
+		String lookup = "ejb:ear-module-a-1.0-SNAPSHOT/ejb-module-a-1.0-SNAPSHOT/Ejb3x_StatelessA!my.test.api.TestCaseRemote";
+		TestCaseRemote testCase = (TestCaseRemote)ejb3xBeanLocator.locateBean(lookup);
+		Assert.assertNotNull(testCase);
+		verifyTestCase(testCase);
+		LOG.info("### Finished test [1] ###");
+	}
+	
+	
+	@Test
+	@OperateOnDeployment(TEST + CONTAINER_1_NON_JTS)
+	public void test_Ejb3x_StatefulA_Without_Jts() throws Exception {
+		LOG.info("### Beginning test [2] ###");
+		String lookup = "ejb:ear-module-a-1.0-SNAPSHOT/ejb-module-a-1.0-SNAPSHOT/Ejb3x_StatefulA!my.test.api.TestCaseRemote?stateful";
+		TestCaseRemote testCase = (TestCaseRemote)ejb3xBeanLocator.locateBean(lookup);
+		Assert.assertNotNull(testCase);
+		verifyTestCase(testCase);
+		LOG.info("### Finished test [2] ###");
+	}
+
+	@Test
+	@OperateOnDeployment(TEST + CONTAINER_3_JTS)
+	public void test_Ejb2x_StatelessA_With_Jts() throws Exception {
+		LOG.info("### Beginning test [3] ###");
+		String lookup = "ejb:ear-module-a-1.0-SNAPSHOT/ejb-module-a-1.0-SNAPSHOT/Ejb2x_StatelessA!my.test.api.TestCaseRemote";
+		TestCaseRemote testCase = (TestCaseRemote)ejb3xBeanLocator.locateBean(lookup);
+		Assert.assertNotNull(testCase);
+		verifyTestCase(testCase);
+		LOG.info("### Finished test [3] ###");
+	}
+	
+	
+	@Test
+	@OperateOnDeployment(TEST + CONTAINER_3_JTS)
+	public void test_Ejb2x_StatefulA_With_Jts() throws Exception {
+		LOG.info("### Beginning test [4] ###");
+		String lookup = "ejb:ear-module-a-1.0-SNAPSHOT/ejb-module-a-1.0-SNAPSHOT/Ejb2x_StatefulA!my.test.api.TestCaseRemote?stateful";
+		TestCaseRemote testCase = (TestCaseRemote)ejb3xBeanLocator.locateBean(lookup);
+		Assert.assertNotNull(testCase);
+		verifyTestCase(testCase);
+		LOG.info("### Finished test [4] ###");
 	}
 	
 
-	@Test
-	@OperateOnDeployment(JTS_TEST)
-	public void test_Ejb2x_StatefulA() {
-		LOG.info("\n\n ############## Runnign test_Ejb2x_StatefulA #############");
+	private void verifyTestCase(TestCaseRemote testCase) throws Exception{
+		String result = testCase.setUp();
+		LOG.info("### Setup result [{}] ###", result);
+		result = testCase.runTest(200, 300);
+		LOG.info("### Test result [{}] ###", result);
+		Assert.assertEquals("Passed", result);
+		result = testCase.tearDown();
+		LOG.info("### Teardown result [{}] ###", result);
 	}
 	
 	
-	
-	
-	/*    @Deployment(name = TEST_EAR, testable = true, order = 1)
-	@TargetsContainer(CONTAINER_A)
-	public static EnterpriseArchive createTestDeployment() {
-    	EnterpriseArchive ear = ShrinkWrap.create(EnterpriseArchive.class);
-        final JavaArchive testJar = ShrinkWrap.create(JavaArchive.class).addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-        testJar.addClass(WookieTest.class);
-        testJar.addClass(MavenResolver.class);
-        final WebArchive testWar = ShrinkWrap.create(WebArchive.class, "Test.war");
-        testWar.addAsLibrary(testJar);
-        ear.addAsManifestResource("jboss-deployment-structure.xml");
-        ear.addAsModule(Testable.archiveToTest(testWar));
-		System.out.println(ear.toString(true));
-		return ear;
-	}*/
 }

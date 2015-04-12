@@ -493,6 +493,18 @@
 			<type>ear</type>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>my.wookie.project</groupId>
+			<artifactId>remote-api</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>my.wookie.project</groupId>
+			<artifactId>test-api</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 

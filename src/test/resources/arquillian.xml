@@ -10,8 +10,7 @@
 	</engine>
 	
 	<group qualifier="jboss_managed">
-		<container qualifier="Container_1_non_jts" default="false">
-			<!-- SET JBOSS_HOME system property to location where your jboss is -->
+		<!-- <container qualifier="Container_1_non_jts" default="false">
 			<configuration>
 				<property name="jbossHome">${jboss.home}</property>
 				<property name="serverConfig">standalone-full-non-jts-node1.xml</property>
@@ -26,7 +25,6 @@
 			</configuration>
 		</container>
 		<container qualifier="Container_2_non_jts" default="false">
-			SET JBOSS_HOME system property to location where your jboss is
 			<configuration>
 				<property name="jbossHome">${jboss.home}</property>
 				<property name="serverConfig">standalone-full-non-jts-node2.xml</property>
@@ -40,13 +38,12 @@
             	</property>
 				<property name="managementPort">10099</property>
 			</configuration>
-		</container>
+		</container> -->
 		<container qualifier="Container_3_jts" default="false">
-			<!-- SET JBOSS_HOME system property to location where your jboss is -->
 			<configuration>
 				<property name="jbossHome">${jboss.home}</property>
 				<property name="serverConfig">standalone-full-jts-node1.xml</property>
-				<property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m 
+				<property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=256m 
 				-Djava.net.preferIPv4Stack=true 
 				-Djboss.server.base.dir=${jboss.home}/standalone3 
 				-Djboss.socket.binding.port-offset=200 
@@ -59,11 +56,10 @@
 			</configuration>
 		</container>
 		<container qualifier="Container_4_jts" default="false">
-			SET JBOSS_HOME system property to location where your jboss is
 			<configuration>
 				<property name="jbossHome">${jboss.home}</property>
 				<property name="serverConfig">standalone-full-jts-node2.xml</property>
-				<property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m
+				<property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=256m
 				-Djava.net.preferIPv4Stack=true
 				-Djboss.server.base.dir=${jboss.home}/standalone4
 				-Djboss.socket.binding.port-offset=300 
