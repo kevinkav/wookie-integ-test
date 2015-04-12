@@ -29,13 +29,13 @@ import org.slf4j.LoggerFactory;
 @RunWith(Arquillian.class)
 public class PersistenceContextScopeTest {
 
-	private static final String CONTAINER_1 = "Container_1";
-	private static final String CONTAINER_2 = "Container_2";
-	private static final String CONTAINER_3 = "Container_3";
-	private static final String CONTAINER_4 = "Container_4";
+	private static final String CONTAINER_1_NON_JTS = "Container_1_non_jts";
+	private static final String CONTAINER_2_NON_JTS = "Container_2_non_jts";
+	private static final String CONTAINER_3_JTS = "Container_3_jts";
+	private static final String CONTAINER_4_JTS = "Container_4_jts";
 	private static final String EAR_A = "EAR_A";
 	private static final String EAR_B = "EAR_B";
-	private static final String TEST_EAR = "TEST_EAR";
+	private static final String JTS_TEST = "TEST_EAR";
 	private static final String EAR_A_GAV = "my.wookie.project:ear-module-a:ear:?";
 	private static final String EAR_B_GAV = "my.wookie.project:ear-module-b:ear:?";
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceContextScopeTest.class);    
@@ -43,8 +43,8 @@ public class PersistenceContextScopeTest {
 /*    @EJB
     TestCase*/
     
-	@Deployment(name = TEST_EAR, testable = true, order = 1)
-	@TargetsContainer(CONTAINER_3)
+	@Deployment(name = JTS_TEST, testable = true, order = 1)
+	@TargetsContainer(CONTAINER_3_JTS)
     public static JavaArchive createDeployment() {
 		LOG.info("### Creating test deployment archive");
         return ShrinkWrap.create(JavaArchive.class)
@@ -55,14 +55,14 @@ public class PersistenceContextScopeTest {
 	
 	
 	@Deployment(name = EAR_A, testable = false, order = 2)
-	@TargetsContainer(CONTAINER_3)
+	@TargetsContainer(CONTAINER_3_JTS)
 	public static EnterpriseArchive createEarA() {
 		LOG.info("### Creating EAR A deployment archive");
 		return MavenResolver.resolveArchive(EnterpriseArchive.class, EAR_A_GAV);
 	}
 	
 	@Deployment(name = EAR_B, testable = false, order = 3)
-	@TargetsContainer(CONTAINER_4)
+	@TargetsContainer(CONTAINER_4_JTS)
 	public static EnterpriseArchive createEarB() {
 		LOG.info("### Creating EAR B deployment archive");
 		return MavenResolver.resolveArchive(EnterpriseArchive.class, EAR_B_GAV);
@@ -70,7 +70,7 @@ public class PersistenceContextScopeTest {
 	
 
 	@Test
-	@OperateOnDeployment(TEST_EAR)
+	@OperateOnDeployment(JTS_TEST)
 	public void test_Ejb2x_StatefulA() {
 		LOG.info("\n\n ############## Runnign test_Ejb2x_StatefulA #############");
 	}
