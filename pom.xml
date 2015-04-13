@@ -83,6 +83,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
 				<executions>
 					<execution>
 						<id>create-standalone2-directory</id>
@@ -178,6 +179,48 @@
 							<includeEmptyDirs>false</includeEmptyDirs>
 							<overwrite>true</overwrite>
 							<outputDirectory>${jboss.home}/standalone2/configuration</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/test/resources</directory>
+									<includes>
+										<include>**/*.properties</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-application-users-properties-standalone3</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<includeEmptyDirs>false</includeEmptyDirs>
+							<overwrite>true</overwrite>
+							<outputDirectory>${jboss.home}/standalone3/configuration</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/test/resources</directory>
+									<includes>
+										<include>**/*.properties</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-application-users-properties-standalone4</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<includeEmptyDirs>false</includeEmptyDirs>
+							<overwrite>true</overwrite>
+							<outputDirectory>${jboss.home}/standalone4/configuration</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/test/resources</directory>

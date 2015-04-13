@@ -33,7 +33,7 @@
 				-Djboss.server.base.dir=${jboss.home}/standalone2
 				-Djboss.socket.binding.port-offset=100 
 				-Djboss.node.name=node2 
-				-Djboss.tx.node.id=2222 
+				-Djboss.tx.node.id=1111 
 				-Djboss.server.log.dir=${jboss.home}/standalone2/log				
             	</property>
 				<property name="managementPort">10099</property>
@@ -48,7 +48,7 @@
 				-Djboss.server.base.dir=${jboss.home}/standalone3 
 				-Djboss.socket.binding.port-offset=200 
 				-Djboss.node.name=node3 
-				-Djboss.tx.node.id=3333 
+				-Djboss.tx.node.id=2222 
 				-Djboss.server.log.dir=${jboss.home}/standalone3/log
             	-Dcom.arjuna.orbportability.initialReferencesRoot=${jboss.home}
             	</property>
@@ -64,7 +64,7 @@
 				-Djboss.server.base.dir=${jboss.home}/standalone4
 				-Djboss.socket.binding.port-offset=300 
 				-Djboss.node.name=node4 
-				-Djboss.tx.node.id=4444 
+				-Djboss.tx.node.id=2222 
 				-Djboss.server.log.dir=${jboss.home}/standalone4/log				
             	</property>
 				<property name="managementPort">10299</property>
