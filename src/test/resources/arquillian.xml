@@ -10,7 +10,7 @@
 	</engine>
 	
 	<group qualifier="jboss_managed">
-		<!-- <container qualifier="Container_1_non_jts" default="false">
+		<container qualifier="Container_1_non_jts" default="false">
 			<configuration>
 				<property name="jbossHome">${jboss.home}</property>
 				<property name="serverConfig">standalone-full-non-jts-node1.xml</property>
@@ -38,7 +38,7 @@
             	</property>
 				<property name="managementPort">10099</property>
 			</configuration>
-		</container> -->
+		</container>
 		<container qualifier="Container_3_jts" default="false">
 			<configuration>
 				<property name="jbossHome">${jboss.home}</property>

@@ -20,157 +20,6 @@
 		<version.shrinkwrap.resolvers>2.1.1</version.shrinkwrap.resolvers>
 	</properties>
 
-	<profiles>
-
-		<profile>
-			<id>nonjts</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>unpack_jboss</id>
-								<phase>generate-test-resources</phase>
-								<goals>
-									<goal>unpack</goal>
-								</goals>
-								<configuration>
-									<ignoreDirect>false</ignoreDirect>
-									<artifactItems>
-										<artifactItem>
-											<groupId>com.ericsson.oss.itpf.eap</groupId>
-											<artifactId>jboss-temp-tar</artifactId>
-											<version>2.1.9</version>
-											<type>tar.gz</type>
-											<overWrite>false</overWrite>
-											<outputDirectory>${jboss.home}</outputDirectory>
-										</artifactItem>
-									</artifactItems>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-					<!-- For clarity, deleting the additional configuration files in the 
-						configuration dir included in the tar file -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.7</version>
-						<executions>
-							<execution>
-								<phase>generate-test-resources</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<delete>
-											<fileset dir="${jboss.home}/standalone/configuration"
-												includes="*.xml" />
-										</delete>
-									</tasks>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>2.6</version>
-						<executions>
-							<execution>
-								<id>create-standalone2-directory</id>
-								<phase>process-test-resources</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<includeEmptyDirs>true</includeEmptyDirs>
-									<overwrite>true</overwrite>
-									<outputDirectory>${jboss.home}/standalone2/</outputDirectory>
-									<resources>
-										<resource>
-											<directory>${jboss.home}/standalone</directory>
-											<includes>
-												<include>**/*.*</include>
-											</includes>
-											<filtering>false</filtering>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-							<execution>
-								<id>copy-standalone-full-jts-node1</id>
-								<phase>process-test-resources</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<includeEmptyDirs>true</includeEmptyDirs>
-									<overwrite>true</overwrite>
-									<outputDirectory>${jboss.home}/standalone/configuration</outputDirectory>
-									<resources>
-										<resource>
-											<directory>src/test/resources</directory>
-											<includes>
-												<include>standalone-full-jts-node1.xml</include>
-											</includes>
-											<filtering>false</filtering>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-							<execution>
-								<id>copy-standalone-full-jts-node2</id>
-								<phase>process-test-resources</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<includeEmptyDirs>true</includeEmptyDirs>
-									<overwrite>true</overwrite>
-									<outputDirectory>${jboss.home}/standalone2/configuration</outputDirectory>
-									<resources>
-										<resource>
-											<directory>src/test/resources</directory>
-											<includes>
-												<include>standalone-full-jts-node2.xml</include>
-											</includes>
-											<filtering>false</filtering>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-					<plugin>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.17</version>
-						<configuration>
-							<systemProperties>
-								<jboss.home>${jboss.home}</jboss.home>
-								<arquillian.launch>jboss_managed</arquillian.launch>
-								<export.path>${export.path}</export.path>
-							</systemProperties>
-						</configuration>
-					</plugin>
-
-				</plugins>
-			</build>
-
-		</profile>
-
-	</profiles>
-
-
 
 	<build>
 		<plugins>
@@ -298,7 +147,48 @@
 							</resources>
 						</configuration>
 					</execution>
-
+					<execution>
+						<id>copy-application-users-properties-standalone</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<includeEmptyDirs>false</includeEmptyDirs>
+							<overwrite>true</overwrite>
+							<outputDirectory>${jboss.home}/standalone/configuration</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/test/resources</directory>
+									<includes>
+										<include>**/*.properties</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-application-users-properties-standalone2</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<includeEmptyDirs>false</includeEmptyDirs>
+							<overwrite>true</overwrite>
+							<outputDirectory>${jboss.home}/standalone2/configuration</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/test/resources</directory>
+									<includes>
+										<include>**/*.properties</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
 					<execution>
 						<id>copy-full-non-jts-node1-config-to-standalone</id>
 						<phase>process-test-resources</phase>

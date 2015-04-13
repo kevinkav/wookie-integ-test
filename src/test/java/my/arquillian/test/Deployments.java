@@ -66,6 +66,7 @@ public class Deployments {
 	}
 	
 	public static EnterpriseArchive getEarModuleA(){
+		LOG.info("### Getting [ear-module-a] deployment archive ###");
 		if (earA == null){
 			earA = Deployments.resolveArchive(EnterpriseArchive.class, EAR_A_GAV);
 		}
@@ -73,6 +74,7 @@ public class Deployments {
 	}
 	
 	public static EnterpriseArchive getEarModuleB(){
+		LOG.info("### Getting [ear-module-b] deployment archive ##");
 		if (earB == null){
 			earB = Deployments.resolveArchive(EnterpriseArchive.class, EAR_B_GAV);
 		}
