@@ -13,6 +13,7 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.Assert;
 import org.junit.Test;
@@ -92,6 +93,7 @@ public class PersistenceContextScopeTest {
 	 ************************************************* */
 
 	@Test
+	@InSequence(1)
 	@OperateOnDeployment(TEST + CONTAINER_1_NON_JTS)
 	public void test_Ejb3x_StatelessA_Without_Jts() throws Exception {
 		LOG.info("### Beginning test [1] ###");
@@ -103,8 +105,9 @@ public class PersistenceContextScopeTest {
 			testCase.runTest(CONTAINER_1_OFFSET, CONTAINER_2_OFFSET);
 			fail("Should have got EJBTransactionRolledbackException here!");
 		}catch (EJBTransactionRolledbackException ex){
-			LOG.info("### Received expected exception ###");
+			LOG.info("### Received expected exception [1] ###");
 		}finally{
+			testCase = (TestCaseRemote)ejb3xBeanLocator.locateBean(lookup);
 			testCase.tearDown();
 		}
 		LOG.info("### Finished test [1] ###");
@@ -112,6 +115,7 @@ public class PersistenceContextScopeTest {
 
 
 	@Test
+	@InSequence(2)
 	@OperateOnDeployment(TEST + CONTAINER_1_NON_JTS)
 	public void test_Ejb3x_StatefulA_Without_Jts() throws Exception {
 		LOG.info("### Beginning test [2] ###");
@@ -121,16 +125,18 @@ public class PersistenceContextScopeTest {
 		testCase.setUp();
 		try {
 			testCase.runTest(CONTAINER_1_OFFSET, CONTAINER_2_OFFSET);
-			fail("Should have got NamingException here!");
-		}catch (NamingException ex){
-			LOG.info("### Received expected exception ###");
+			fail("Should have got EJBTransactionRolledbackException here!");
+		}catch (EJBTransactionRolledbackException ex){
+			LOG.info("### Received expected exception [2] ###");
 		}finally{
+			testCase = (TestCaseRemote)ejb3xBeanLocator.locateBean(lookup);
 			testCase.tearDown();
 		}
 		LOG.info("### Finished test [2] ###");
 	}
 
 	@Test
+	@InSequence(3)
 	@OperateOnDeployment(TEST + CONTAINER_1_NON_JTS)
 	public void test_Ejb2x_StatelessA_Without_Jts() throws Exception {
 		LOG.info("### Beginning test [3] ###");
@@ -141,15 +147,15 @@ public class PersistenceContextScopeTest {
 		try {
 			String actualResult = testCase.runTest(CONTAINER_1_OFFSET, CONTAINER_2_OFFSET);
 			Assert.assertEquals(FAILED, actualResult);
-		}catch (EJBTransactionRolledbackException ex){
-			LOG.info("### Received expected exception ###");
 		}finally{
+			testCase = (TestCaseRemote)ejb3xBeanLocator.locateBean(lookup);
 			testCase.tearDown();
 		}
 		LOG.info("### Finished test [3] ###");
 	}
 
 	@Test
+	@InSequence(4)
 	@OperateOnDeployment(TEST + CONTAINER_1_NON_JTS)
 	public void test_Ejb2x_StatefulA_Without_Jts() throws Exception {
 		LOG.info("### Beginning test [4] ###");
@@ -160,15 +166,15 @@ public class PersistenceContextScopeTest {
 			testCase.setUp();
 			String actualResult = testCase.runTest(CONTAINER_1_OFFSET, CONTAINER_2_OFFSET);
 			Assert.assertEquals(FAILED, actualResult);
-		}catch (IllegalStateException ex){
-			LOG.info("### Received expected exception ###");
 		}finally{
+			testCase = (TestCaseRemote)ejb3xBeanLocator.locateBean(lookup);
 			testCase.tearDown();
 		}
 		LOG.info("### Finished test [4] ###");
 	}
 
 	@Test
+	@InSequence(5)
 	@OperateOnDeployment(TEST + CONTAINER_3_JTS)
 	public void test_Ejb3x_StatelessA_With_Jts() throws Exception {
 		LOG.info("### Beginning test [5] ###");
@@ -178,10 +184,11 @@ public class PersistenceContextScopeTest {
 		try {
 			testCase.setUp();
 			testCase.runTest(CONTAINER_3_OFFSET, CONTAINER_4_OFFSET);
-			fail("Should have got EJBTransactionRolledbackException here!");
+			fail("Should have got exception here!");
 		}catch (EJBTransactionRolledbackException ex){
-			LOG.info("### Received expected exception ###");
+			LOG.info("### Received expected exception [5] ###");
 		}finally{
+			testCase = (TestCaseRemote)ejb3xBeanLocator.locateBean(lookup);
 			testCase.tearDown();
 		}
 		LOG.info("### Finished test [5] ###");
@@ -189,6 +196,7 @@ public class PersistenceContextScopeTest {
 
 
 	@Test
+	@InSequence(6)
 	@OperateOnDeployment(TEST + CONTAINER_3_JTS)
 	public void test_Ejb3x_StatefulA_With_Jts() throws Exception {
 		LOG.info("### Beginning test [6] ###");
@@ -198,16 +206,18 @@ public class PersistenceContextScopeTest {
 		try {
 			testCase.setUp();
 			testCase.runTest(CONTAINER_3_OFFSET, CONTAINER_4_OFFSET);
-			fail("Should have got NamingException here!");
-		}catch (NamingException ex){
-			LOG.info("### Received expected exception ###");
+			fail("Should have got Exception here!");
+		}catch (EJBTransactionRolledbackException ex){
+			LOG.info("### Received expected exception [6] ###");
 		}finally{
+			testCase = (TestCaseRemote)ejb3xBeanLocator.locateBean(lookup);	// in case bean has gone back into the bean pool
 			testCase.tearDown();
 		}
 		LOG.info("### Finished test [6] ###");
 	}
 
 	@Test
+	@InSequence(7)
 	@OperateOnDeployment(TEST + CONTAINER_3_JTS)
 	public void test_Ejb2x_StatelessA_With_Jts() throws Exception {
 		LOG.info("### Beginning test [7] ###");
@@ -223,6 +233,7 @@ public class PersistenceContextScopeTest {
 
 
 	@Test
+	@InSequence(8)
 	@OperateOnDeployment(TEST + CONTAINER_3_JTS)
 	public void test_Ejb2x_StatefulA_With_Jts() throws Exception {
 		LOG.info("### Beginning test [8] ###");
@@ -235,9 +246,6 @@ public class PersistenceContextScopeTest {
 		testCase.tearDown();
 		LOG.info("### Finished test [8] ###");
 	}
-
-
-
 
 
 }
