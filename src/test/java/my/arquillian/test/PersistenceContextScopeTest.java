@@ -4,7 +4,6 @@ import static org.junit.Assert.fail;
 
 import javax.ejb.EJBTransactionRolledbackException;
 import javax.inject.Inject;
-import javax.naming.NamingException;
 
 import my.remote.bean.locator.Ejb3xBeanLocator;
 import my.test.api.TestCaseRemote;
